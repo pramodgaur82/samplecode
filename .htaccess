@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "MEG UK Development login"
+AuthUserFile /opt/htpasswd
+Require valid-user

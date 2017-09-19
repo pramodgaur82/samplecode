@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+{% from "flask_user/_macros.html" import admin_list_users,diet_list %}
+
+<h2>Admin: User management</h2>
+
+<p>Click a user to edit their details, or to delete them. <strong>Deleting a user will also delete all of their abstracts</strong></p>
+
+{% for count in num_people %}
+    <p>{{ count[0] }}: {{ count[1] }}</p>
+{% endfor %}
+
+{{ admin_list_users(users) }}
+
+<h2>Mailing list</h2>
+{{ mailing_list }}
+
+<h2>Dietary list</h2>
+
+<h3>Vegetarian</h3>
+
+<h4>Dinner</h4>
+
+{{ diet_list(veg_people) }}
+
+<h4>Lunch</h4>
+
+{{ diet_list(lunch_veg_people) }}
+
+<h3>Gluten free</h3>
+
+<h4>Dinner</h4>
+
+{{ diet_list(gf_people) }}
+
+<h4>Lunch</h4>
+
+{{ diet_list(lunch_gf_people) }}
+
+<h3>Dairy free</h3>
+
+<h4>Dinner</h4>
+
+{{ diet_list(df_people) }}
+
+<h4>Lunch</h4>
+
+{{ diet_list(lunch_df_people) }}
+
+<h3>Halal</h3>
+
+<h4>Dinner</h4>
+
+{{ diet_list(halal_people) }}
+
+<h4>Lunch</h4>
+
+{{ diet_list(lunch_halal_people) }}
+
+<h3>Waitlist</h3>
+
+{{ admin_list_users(not_attending_users) }}
+
+<h3>Unvalidated users</h3>
+
+{{ admin_list_users(unvalidated_users) }}
+
+{% endblock %}
+

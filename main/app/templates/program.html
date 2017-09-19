@@ -1,0 +1,44 @@
+{% extends 'wide_base.html' %}
+
+{% block title %}: Program{% endblock %}
+
+{% block content %}
+
+<h2>Program</h2>
+
+<h4>Workshop</h4>
+
+<p>MEG UK 2017 begins with a one-day educational workshop on the 22nd March. The workshop contains a range of talks introducing a range of modern analysis techniques for MEG data. Speakers will introduce relevant concepts for beginners and provide practical advice for those looking to utilise the methods described.  The workshop will be beneficial for those who work, or are planning to work, in MEG research and already have some familiarity with the core concepts in analysis and data collection.</p>
+
+<h4>Keynote speakers</h4>
+
+<ul>
+<li><strong>Christoph Michel</strong>: EEG microstates as basic building blocks of mentation at rest.</li>
+<li><strong>Stephanie Jones</strong>: Biophysically Principled Modeling of Human MEG/EEG signals Reveals Novel Mechanisms and Meaning of Brain Rhythms.</li>
+<li><strong>Pascal Fries</strong>: Rhythms for Cognition: Communication through Coherence.</li>
+</ul>
+
+<h4>Overview</h4>
+
+<div class="table-responsive">
+<table class="table table-condensed table-striped">
+<tr><td colspan="2"><strong>Day 1</strong></td><td colspan="2"><strong>Day 2</strong></td></tr>
+<tr><td>09:45</td><td>Registration </td><td>09:15</td><td>Business Meeting</td></tr>
+<tr><td>10:30</td><td>Welcome </td><td>09:45</td><td>Ulster</td></tr>
+<tr><td>10:45</td><td>Stephanie Jones</td><td>10:30</td><td>Aston</td></tr>
+<tr><td>11:45</td><td>Glasgow</td><td>11:15</td><td>Coffee</td></tr>
+<tr><td>12:30</td><td>Birmingham</td><td>11:45</td><td>Pascal Fries</td></tr>
+<tr><td>12:45</td><td>Lunch</td><td>12:45</td><td>Lunch</td></tr>
+<tr><td>13:30</td><td>Nottingham</td><td>13:30</td><td>UCL</td></tr>
+<tr><td>14:30</td><td>Short Talks A</td><td>14:15</td><td>Short Talks B</td></tr>
+<tr><td>14:45</td><td>Coffee and Posters</td><td>14:45</td><td>Coffee and Posters</td></tr>
+<tr><td>15:45</td><td>York</td><td>15:45</td><td>Cambridge</td></tr>
+<tr><td>16:30</td><td>Cardiff</td><td>16:30</td><td>Oxford</td></tr>
+<tr><td>17:15</td><td>Wrap up</td><td>17:15</td><td>Wrap up</td></tr>
+<tr><td>17:30</td><td>Close</td><td>17:30</td><td>Close</td></tr>
+</table>
+</div>
+
+<h3><a href="{{ url_for('static', filename='meguk_program.pdf') }}">Full program</h3>
+
+{% endblock %}

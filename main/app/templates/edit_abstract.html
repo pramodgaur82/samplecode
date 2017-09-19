@@ -1,0 +1,96 @@
+{% extends 'wide_base.html' %}
+
+{% block title %}: Edit abstract{% endblock %}
+
+{% block content %}
+{% from "flask_user/_macros.html" import render_field, render_checkbox_field, render_submit_field %}
+<h2>Edit abstract</h2>
+
+{% if config.CONFERENCE_ABSTRACT_SUBMISSION_OPEN %}
+<form action="edit_abstract" method="POST" name="edit_abstract">
+{% else %}
+<form action="null" method="POST" name="edit_abstract">
+{% endif %}
+
+{{ form.hidden_tag() }}
+
+{% if config.CONFERENCE_ABSTRACT_SUBMISSION_OPEN %}
+{{ render_field(form.title) }}
+{% else %}
+{{ render_field(form.title,disabled=True) }}
+{% endif %}
+
+<p><strong>Author:</strong> {{ current_user.title }} {{ current_user.first_name }} {{ current_user.last_name }}</p>
+<p><strong>Institution:</strong> {{ current_user.affiliation }}</p>
+
+{% if config.CONFERENCE_ABSTRACT_SUBMISSION_OPEN %}
+{{ render_field(form.category) }}
+{% else %}
+{{ render_field(form.category,disabled=True) }}
+{% endif %}
+
+<p>If you are only presenting a poster, you do <b>not</b> need to provide any text for your abstract.</p>
+
+<hr / >
+
+{% if config.CONFERENCE_ABSTRACT_SUBMISSION_OPEN %}
+{{ render_checkbox_field(form.is_talk) }}
+{% else %}
+{{ render_checkbox_field(form.is_talk,disabled=True) }}
+{% endif %}
+
+<div id="abstract_fields">
+{% if config.CONFERENCE_ABSTRACT_SUBMISSION_OPEN %}
+{{ render_field(form.abstract,rows=20) }}
+{% else %}
+{{ render_field(form.abstract,rows=20,disabled=True) }}
+{% endif %}
+<div id="characters_remaining" style="padding-bottom: 5px;" ></div>
+</div>
+
+{% if config.CONFERENCE_ABSTRACT_SUBMISSION_OPEN %}
+<div class="row" style="padding-bottom: 5px;">
+	<div class="col-xs-6">
+		{{ form.submit(class_="btn btn-default btn-primary") }}
+	</div>
+	<div class="col-xs-6 text-right" >
+		{{ form.delete(class_="btn btn-default btn-danger",onclick="return confirm('Are you sure you want to delete your abstract?')") }}
+	</div>
+</div>
+<p><em>You can come back and edit your abstract any time until 23rd January 2017</em></p>
+
+{% endif %}
+
+</form>
+
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready(function(){
+    $('#is_talk').change(function(){
+        if(this.checked)
+            $('#abstract_fields').show();
+        else
+            $('#abstract_fields').hide();
+    }).change();
+
+    var text_max = 1500;
+
+    $('#abstract').keyup(function() {
+        var text_length = $('#abstract').val().length;
+        var text_remaining = text_max - text_length;
+
+        if (text_remaining < 0) {
+        	$('#characters_remaining').html(-text_remaining + ' characters over limit');
+        	document.getElementById("characters_remaining").style.color = "#a94442";
+        } else { 
+        	$('#characters_remaining').html(text_remaining + ' characters remaining');
+        	document.getElementById("characters_remaining").style.color = "black";
+        }
+    }).keyup();
+
+
+});
+</script>
+{% endblock %}

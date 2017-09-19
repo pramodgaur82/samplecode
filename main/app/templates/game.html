@@ -1,0 +1,49 @@
+{% extends 'wide_base.html' %}
+
+{% block content %}
+
+<h2>Networking game</h2>
+
+You're playing the MEG UK 2017 networking game! Everyone at the conference has been divided into teams. Your objective is to scan the QR codes belonging to each of the people listed below, thus earning points for your team. 
+
+<h4>You are on Team {{ user_team }}.</h4>
+
+{{chart|safe}}
+
+<h3>Objectives</h3>
+
+To earn points for your team, find the following people and scan the QR code on their name tag:
+
+<table class="table">
+    <thead>
+      <tr>
+        <th>Participant</th>
+        <th>Tagged at</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+
+    {% for tag in tag_data %}
+
+	    {% if tag[1].time is none %}
+	    	<tr class="danger">
+	    {% else %}
+	    	<tr class="success">
+	    {% endif %}
+	    
+	    <td>{{ tag[0].title }} {{ tag[0].first_name }} {{ tag[0].last_name }}</td>
+	    
+	    {% if tag[1].time is none %}
+	    	<td>-</td>
+	    {% else %}
+	    	<td>{{ tag[1].time.strftime('%I:%M %p, %A %d %b %Y') }}</td>
+	    {% endif %}
+
+	    </tr>
+	{% endfor %}
+
+    </tbody>
+ </table>
+
+{% endblock %}

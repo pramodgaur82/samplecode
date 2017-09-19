@@ -1,0 +1,74 @@
+{% macro render_field(field, label=None, label_visible=true, right_url=None, right_label=None, readonly=False, disabled=False) -%}
+    <div class="form-group {% if field.errors %}has-error{% endif %} {{ kwargs.pop('class_', '') }}">
+        {% if field.type != 'HiddenField' and label_visible %}
+            {% if not label %}{% set label=field.label.text %}{% endif %}
+            <label for="{{ field.id }}" class="control-label">{{ label|safe }}</label>
+        {% endif %}
+        {{ field(class_='form-control', readonly=readonly, disabled=disabled,**kwargs) }}
+        {% if field.errors %}
+            {% for e in field.errors %}
+                <p class="help-block">{{ e }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+{%- endmacro %}
+ 
+{% macro render_checkbox_field(field, label=None, readonly=False, disabled=False) -%}
+    {% if not label %}{% set label=field.label.text %}{% endif %}
+    <div class="checkbox">
+        <label>
+            {{ field(type='checkbox', readonly=readonly, disabled=disabled, **kwargs) }} {{ label }}
+        </label>
+    </div>
+{%- endmacro %}
+ 
+{% macro render_radio_field(field) -%}
+    {% for value, label, checked in field.iter_choices() %}
+        <div class="radio">
+            <label>
+                <input type="radio" name="{{ field.id }}" id="{{ field.id }}" value="{{ value }}"{% if checked %} checked{% endif %}>
+                {{ label }}
+            </label>
+        </div>
+    {% endfor %}
+{%- endmacro %}
+
+{% macro render_submit_field(field, label=None, tabindex=None) -%}
+    {% if not label %}{% set label=field.label.text %}{% endif %}
+    <input type="submit" class="btn btn-default btn-primary" value="{{label}}"
+           {% if tabindex %}tabindex="{{ tabindex }}"{% endif %}
+           >
+{%- endmacro %}
+
+{% macro render_submit_confirm_field(field, label=None, tabindex=None) -%}
+    {% if not label %}{% set label=field.label.text %}{% endif %}
+    <input type="submit" onclick="return confirm('Are you sure you want to delete your abstract?')" class="btn btn-default btn-danger" value="{{label}}"
+           {% if tabindex %}tabindex="{{ tabindex }}"{% endif %}
+           >
+{%- endmacro %}
+
+{% macro admin_list_abstracts(abstracts) -%}
+    {% for d in abstracts %}
+    <div>
+    <p>{{ loop.index }}. <a href="{{ url_for('admin_abstract_review',id=d[1].id) }}"> &lt;{{ d[1].category }}&gt; {{ d[1].title }} - {{ d[0].title }} {{ d[0].first_name }} {{ d[0].last_name }}, {{ d[0].affiliation }}</a></p>
+    </div>
+    {% endfor %}
+{%- endmacro %}
+
+{% macro admin_list_users(users) -%}
+    {% for user in users %}
+    <div>
+        <p>{{ loop.index }}. <a href="{{ url_for('admin_manage_registration',id=user.id) }}">{{ user.email }} ({{ user.first_name }} {{ user.last_name }}, {{ user.affiliation}})</a></p>
+    </div>
+    {% endfor %}
+{%- endmacro %}
+
+{% macro diet_list(users) -%}
+    {% for user in users %}
+    <div>
+        <p>{{ loop.index }}. {{ user.title }} {{ user.first_name }} {{ user.last_name }} ({{ user.email }})</p>
+    </div>
+    {% endfor %}
+{%- endmacro %}
+
+

@@ -1,0 +1,76 @@
+{% extends 'wide_base.html' %}
+
+{% block title %}: My details{% endblock %}
+
+{% block content %}
+{% from "flask_user/_macros.html" import render_field, render_checkbox_field, render_submit_field %}
+<h2>{%trans%}My details{%endtrans%}</h2>
+
+{% if not current_user.is_attending %}
+  <div class="alert alert-danger">
+    <strong>Wait list</strong> You are currently on the waiting list for MEG UK 2017. We will contact you if space becomes available.
+  </div>
+{% endif %}
+
+{% if config.CONFERENCE_EDIT_SELF_OPEN %}
+<form action="" method="POST" name="manage_registration">
+{% else %}
+<form action="null" method="POST" name="manage_registration">
+{% endif %}
+
+{{ form.hidden_tag() }}
+
+{% if config.CONFERENCE_EDIT_SELF_OPEN %}
+
+{{ render_field(form.title) }}
+{{ render_field(form.first_name) }}
+{{ render_field(form.last_name) }}
+{{ render_field(form.email, disabled=True) }}
+{{ render_field(form.affiliation) }}
+
+{{ render_checkbox_field(form.intends_workshop, tabindex=130) }}
+
+{% if current_user.intends_dinner or n_dinner <= config.LIMIT_DINNER %}
+{{ render_checkbox_field(form.intends_dinner, tabindex=130) }}
+{% if n_dinner > config.LIMIT_DINNER %}
+<p><em>Please note that the conference dinner is now full. If you opt out of the dinner now, you will not be able to opt back in.</em></p>
+{% endif %} 
+<div id=dietary_requirements_options>
+{{ render_field(form.dietary_requirements, disabled=True, tabindex=230) }}
+</div>
+{% endif %}
+
+{{ render_submit_field(form.submit, tabindex=180) }}
+
+{% else %}
+
+{{ render_field(form.title, disabled=True) }}
+{{ render_field(form.first_name, disabled=True) }}
+{{ render_field(form.last_name, disabled=True) }}
+{{ render_field(form.email, disabled=True) }}
+{{ render_field(form.affiliation, disabled=True) }}
+{{ render_checkbox_field(form.intends_workshop, tabindex=130, disabled=True) }}
+{{ render_checkbox_field(form.intends_dinner, tabindex=130, disabled=True) }}
+<div id=dietary_requirements_options>
+{{ render_field(form.dietary_requirements, disabled=True, tabindex=230) }}
+</div>
+{{ render_checkbox_field(form.intends_poster, tabindex=130, disabled=True) }}
+{{ render_checkbox_field(form.intends_talk, tabindex=130, disabled=True) }}
+
+{% endif %}
+</form>
+
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready(function(){
+    $('#intends_dinner').change(function(){
+        if(this.checked)
+            $('#dietary_requirements_options').show();
+        else
+            $('#dietary_requirements_options').hide();
+    }).change();;
+});
+</script>
+{% endblock %}

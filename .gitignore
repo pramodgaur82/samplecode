@@ -1,0 +1,6 @@
+*.DS_Store
+logs
+*.pyc
+._*
+app.db
+main/qr_codes

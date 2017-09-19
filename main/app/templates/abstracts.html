@@ -1,0 +1,40 @@
+{% extends 'wide_base.html' %}
+
+{% block title %}: My abstract{% endblock %}
+
+{% block content %}
+<h2>Abstract submission</h2>
+
+
+{% filter markdown %}
+
+The abstract submission deadline is 23rd January 2017. You can edit your submission until the deadline.
+
+You may submit one abstract for a poster presentation. All posters will be accepted, and you only need to provide a title and category. 
+
+_Posters must be A0 size and portrait orientation. Our poster boards will not fit larger or landscape posters._
+
+You can also request a 5 minute short talk. To ensure that all speakers get a chance to present their work, the time limit will be strict. As slots for the talks are limited, these will be selected competitively. You will need to provide an abstract for your talk. Presenters may use their own laptop. Alternatively, we will have available a Windows PC with Microsoft Powerpoint, and a Mac with Keynote.
+
+Need to print your poster in Oxford? We've previously used [John E Wright](http://www.johnewright.com/locations/oxford/) and [Oxford Brookes](https://www.brookes.ac.uk/brookes-print/) for poster printing with same-day turnaround. 
+
+{% endfilter %}
+
+For special requests, please email <script type="text/javascript">mailto("meguk2017", "ohba.ox.ac.uk");</script>.
+
+<div style="padding-top: 10px;">
+{% for d in abstracts %}
+<h4><a href="{{ url_for('edit_abstract',id=d.id) }}">Abstract: {{ d.title }}</a></h4>
+{% endfor %}
+</div>
+
+{% if config.CONFERENCE_ABSTRACT_SUBMISSION_OPEN %}
+{% if abstracts is none or abstracts|length < 1 %}
+<form action="abstracts" method="POST" name="new_abstract">
+<input name='action' type="submit" class="btn btn-default btn-primary" value="Add abstract">
+</form>
+{% endif %}
+{% else %}
+<p><em>Abstract submission has now closed. Please email <script type="text/javascript">mailto("meguk2017", "ohba.ox.ac.uk");</script> if you would like to request a presentation or need to amend your submission.</em></p>{% endif %}
+
+{% endblock %}

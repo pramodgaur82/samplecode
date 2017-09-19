@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> MEG UK 2017 {% block title %}{% endblock %}</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">    
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="/static/main.css">
+
+    <link href="/static/sticky-footer-navbar.css" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+    <![endif]-->
+
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}"/>
+
+  </head>
+
+
+<body>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!--     <script  src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+ -->    <!-- Bootstrap -->
+    <script src= "{{ url_for('static', filename='jquery-2.2.4.min.js') }}"></script>
+    <script src= "{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src= "{{ url_for('static', filename='scripts.js') }}"></script>
+    <link href= "{{ url_for('static', filename='ie10-viewport-bug-workaround.js') }}" rel="stylesheet">
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='meguk_logo.svg') }}" alt="MEG UK 2017"></a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+
+                    {% if not (call_or_get(current_user.is_authenticated) and call_or_get(current_user.is_admin)) %}
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('location') }}">Location</a></li>
+                    <li><a href="{{ url_for('accommodation') }}">Accommodation</a></li>
+                    <li><a href="{{ url_for('program') }}">Program</a></li>
+                    {% endif %}
+
+
+                    {% if call_or_get(current_user.is_authenticated) %}
+                    <li><a href="{{ url_for('manage_registration') }}">My details</a></li>
+                    <li><a href="{{ url_for('abstracts') }}">My abstract</a></li>
+
+                    {% if call_or_get(current_user.is_admin) %}
+                    <li><a href="{{ url_for('admin_user_list') }}">User list</a></li>
+                    <li><a href="{{ url_for('admin_abstract_list',talk=False) }}">Poster list</a></li>
+                    <li><a href="{{ url_for('admin_abstract_list',talk=True) }}">Talk list</a></li>
+                    {% endif %}
+
+                    {% else %}
+                    <li><a href="/user/register">Register</a></li>
+                    {% endif %}
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    {% if call_or_get(current_user.is_authenticated) %}
+                    <li><a href="{{ url_for('user.profile') }}">Account</a></li>
+                    <li><a href="{{ url_for('user.logout') }}">Sign out</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('user.login') }}">Sign in</a></li>
+                    {% endif %}
+
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+
+    <div class="container col-centered with-margins ">
+
+    {% block body %}
+
+    <div id="main-div" >
+    {# One-time system messages called Flash messages #}
+    {% block flash_messages %}
+        {%- with messages = get_flashed_messages(with_categories=true) -%}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category=='error' %}
+                        {% set category='danger' %}
+                    {% endif %}
+                    <div class="alert alert-{{category}}">{{ message|safe }}</div>
+                {% endfor %}
+            {% endif %}
+        {%- endwith %}
+    {% endblock %}
+
+    {% block main %}{% block content %}{% endblock %}{% endblock %}
+    </div>
+
+
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+      <div class="pull-right">
+        <p class="text-muted">&copy; 2016 University of Oxford</p>
+      </div>
+      </div>
+    </footer>
+
+    {% endblock %}
+
+    {% block script %}{% endblock %}
+
+
+  </body>
+    
+</html>

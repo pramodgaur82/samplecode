@@ -1,0 +1,131 @@
+{% extends 'wide_base.html' %}
+{% block title %}: Register{% endblock %}
+
+{% block content %}
+{% from "flask_user/_macros.html" import render_field, render_checkbox_field, render_submit_field %}
+
+<h2>{%trans%}Register{%endtrans%}</h2>
+
+{% if config.CONFERENCE_REGISTRATION_OPEN %}
+
+<p>Registration for MEG UK 2017 is free, although the number of places is limited so you are encouraged to register early. To help plan the conference, please indicate now whether you plan to submit a poster and/or a short talk (you can submit your abstract later). Registration and abstract submission closes 23rd January 2017. Problems registering? Please email <script type="text/javascript">mailto("meguk2017", "ohba.ox.ac.uk");</script></p>
+
+<br />
+
+<div class="col-sm-8 col-md-8 col-lg-8 col-centered">
+
+<form action="" method="POST" novalidate formnovalidate class="form" role="form">
+    {{ form.hidden_tag() }}
+
+    {# Username or Email #}
+    {% set field = form.username if user_manager.enable_username else form.email %}
+    <div class="form-group {% if field.errors %}has-error{% endif %}">
+        {# Label on left, "Already registered? Sign in." on right #}
+        <div class="row">
+            <div class="col-xs-6">
+                <label for="{{ field.id }}" class="control-label">{{ field.label.text }}</label>
+            </div>
+            <div class="col-xs-6 text-right">
+                {% if user_manager.enable_register %}
+                    <a href="{{ url_for('user.login') }}" tabindex='290'>
+                        {%trans%}Already registered? Sign in.{%endtrans%}</a>
+                {% endif %}
+            </div>
+        </div>
+        {{ field(class_='form-control', tabindex=210) }}
+        {% if field.errors %}
+            {% for e in field.errors %}
+                <p class="help-block">{{ e }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    {{ render_field(form.password, tabindex=230) }}
+
+    {% if user_manager.enable_retype_password %}
+        {{ render_field(form.retype_password, tabindex=240) }}
+    {% endif %}
+
+    <br />
+
+    <h4>Personal information</h4>
+
+    {{ render_field(form.title, tabindex=250) }}
+
+    {{ render_field(form.first_name, tabindex=250) }}
+
+    {{ render_field(form.last_name, tabindex=250) }}
+
+    {{ render_field(form.affiliation, tabindex=250) }}
+
+    <div id=custom_affiliation_container>
+    {{ render_field(form.temp_custom_affiliation, tabindex=250) }}
+    </div>
+
+    <h4>Attendance</h4>
+
+    {{ render_checkbox_field(form.intends_workshop, tabindex=250) }}
+
+    {% if form.n_dinner <= config.LIMIT_DINNER %}
+
+    {{ render_checkbox_field(form.intends_dinner, tabindex=250) }}
+
+    <div id=dietary_requirements_container>
+    {{ render_field(form.dietary_requirements, tabindex=250) }}
+    </div>
+    
+    {% endif %}
+
+    <h4>Abstracts</h4>
+
+    <em>To help us plan the conference, please indicate whether you are planning to submit abstracts for a poster and/or a short talk.</em>
+
+    {{ render_checkbox_field(form.intends_poster, tabindex=250) }}
+
+    {{ render_checkbox_field(form.intends_talk, tabindex=250) }}
+
+    <br />
+
+    {{ form.recaptcha }}
+
+    <br />
+
+    {% if form.n_users >= config.LIMIT_WAITLIST %}
+
+    <p><em>MEG UK 2017 is now oversubscribed. Registering now will place you on a waiting list. We will contact you if space becomes available</em></p>
+
+    {% endif %}
+
+    {{ render_submit_field(form.submit, tabindex=280) }}
+
+</form>
+
+</div>
+
+{% else %}
+
+<h4>Registration for MEG UK 2017 is now closed.</h4>
+
+{% endif %}
+
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready(function(){
+    $('#intends_dinner').change(function(){
+        if(this.checked)
+            $('#dietary_requirements_container').show();
+        else
+            $('#dietary_requirements_container').hide();
+    }).change();
+    $('#affiliation').change(function(){
+        if(this.value === 'Other')
+            $('#custom_affiliation_container').show();
+        else
+            $('#custom_affiliation_container').hide();
+    }).change();
+});
+</script>
+{% endblock %}
+

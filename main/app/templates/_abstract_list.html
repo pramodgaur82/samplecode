@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+{% from "flask_user/_macros.html" import admin_list_abstracts %}
+
+{% if is_talks %}
+<h2>Admin: Talks</h2>
+{% else %}
+<h2>Admin: Posters</h2>
+{% endif %}
+
+<h3>To review</h3>
+
+{{ admin_list_abstracts(abstract_list[0]) }}
+
+<h3>Accepted</h3>
+
+{% if is_talks %}
+	{{ admin_list_abstracts(abstract_list[1]) }}
+{% else %}
+	<h4>Session 1</h4>
+	{{ admin_list_abstracts(abstract_list[1]) }}
+	<h4>Session 2</h4>
+	{{ admin_list_abstracts(abstract_list[2]) }}
+{% endif %}
+
+
+<h3>Rejected</h3>
+{% if is_talks %}
+	{{ admin_list_abstracts(abstract_list[2]) }}
+{% else %}
+	{{ admin_list_abstracts(abstract_list[3]) }}
+{% endif %}
+
+<h2>Mailing list</h2>
+<h3>Accepted</h3>
+{% if is_talks %}
+	{{ mailing_list_accepted[0] }}
+{% else %}
+	<h4>Session 1</h4>
+	{{ mailing_list_accepted[0] }}
+	<h4>Session 2</h4>
+	{{ mailing_list_accepted[1] }}
+{% endif %}
+
+<h3>Rejected</h3>
+
+{{ mailing_list_rejected }}
+
+{% endblock %}

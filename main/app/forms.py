@@ -36,8 +36,8 @@ class UserInfoForm(Form):
     email = StringField('Email')
     affiliation = StringField('Affiliation',validators=[DataRequired(),Length(max=255)])
 
-    intends_workshop = BooleanField('Attending educational workshop (22nd March)')
-    intends_dinner = BooleanField('Attending conference dinner (23rd March)')
+    intends_workshop = BooleanField('Attending educational workshop (26th March)')
+    intends_dinner = BooleanField('Attending conference dinner (27th March)')
     dietary_requirements = SelectField('Dietary requirements',choices=[(x,x) for x in dietary_options],validators=[DataRequired()])
 
     intends_poster = BooleanField('Intention to submit poster')
@@ -80,8 +80,8 @@ class CustomRegister(RegisterForm):
     affiliation = SelectField('Affiliation',choices=[(x,x) for x in unis],validators=[DataRequired()])
     temp_custom_affiliation = StringField('Specify affiliation',validators=[RequiredIfFieldEqualTo('affiliation','Other'),Length(max=255)])
 
-    intends_workshop = BooleanField('Attending educational workshop (22nd March)')
-    intends_dinner = BooleanField('Attending conference dinner (23rd March)')
+    intends_workshop = BooleanField('Attending educational workshop (26th March)')
+    intends_dinner = BooleanField('Attending conference dinner (27th March)')
     dietary_requirements = SelectField('Dietary requirements',choices=[(x,x) for x in dietary_options],default=1,validators=[DataRequired()])
 
     intends_poster = BooleanField('I plan to submit a poster')
